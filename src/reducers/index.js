@@ -7,7 +7,7 @@
 //     return state;
 // }
 
-import { ADD_MOVIES, ADD_FAVOURITE} from "../actions";
+import { ADD_MOVIES, ADD_TO_FAVOURITES,REMOVE_FROM_FAVOURITES} from "../actions";
 const initialMoviesState = {
     list:[],
     favourites:[]
@@ -29,10 +29,19 @@ export default function movies(state = initialMoviesState, action){
                 ...state,
                 list:action.movies
             }
-        case ADD_FAVOURITE:
+        case ADD_TO_FAVOURITES:
             return {
                 ...state,
                 favourites:[action.movie,...state.favourites]
+            }
+        case REMOVE_FROM_FAVOURITES:
+            const filteredArray = state.favourites.filter(
+                movie => movie.Title !== action.movie.Title
+            );
+            //filter returns neww array so no voilation of rule
+            return {
+                ...state,
+                favourites:filteredArray
             }
         default:
             return state;
