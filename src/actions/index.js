@@ -6,3 +6,10 @@
 //     type:"INCREASE_COUNT"
 
 // }
+export const ADD_MOVIES = "ADD_MOVIES";
+export function addmovies(movies){
+    return{
+        type:ADD_MOVIES,
+        movies
+    }
+};

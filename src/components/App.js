@@ -2,6 +2,7 @@ import React from 'react';
 import {data} from '../data';
 import Navbar from './Navbar';
 import MovieCard from './MovieCard';
+import {addmovies} from '../actions';
 
 class App extends React.Component {
   componentDidMount (){
@@ -13,10 +14,13 @@ class App extends React.Component {
       this.forceUpdate();
     });
 
-    store.dispatch({
-      type:'ADD_MOVIES',
-      movies: data
-    });
+    // store.dispatch({
+    //   type:'ADD_MOVIES',
+    //   movies: data
+    // });
+    // ideal way to do
+    store.dispatch(addmovies(data));
+
     console.log('STATE',store.getState());
   }
   render(){
