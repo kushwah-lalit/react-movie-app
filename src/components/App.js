@@ -23,9 +23,18 @@ class App extends React.Component {
 
     console.log('STATE',store.getState());
   }
+  isMovieFavourite = (movie) => {
+    const {favourites} = this.props.store.getState();
+    const index = favourites.indexOf(movie);
+    if(index !== -1){
+      return true;
+    }
+    return false;
+  }
   render(){
     // const movies = this.props.store.getState();//this was case when state was array of movies but now object
     const {list} = this.props.store.getState();
+    console.log(this.props.store.getState());
 
     console.log('RENDER');
     return (
@@ -38,7 +47,13 @@ class App extends React.Component {
           </div>
           <div className="list">
               {list.map((movie,index) => (
-                  <MovieCard movie={movie} key={ `movie-${index}`} />
+                // as we got store in props so need to send the store dispatch via props
+                  <MovieCard 
+                  movie={movie} 
+                  key={ `movie-${index}`} 
+                  dispatch={this.props.store.dispatch}
+                  isFavourite={this.isMovieFavourite(movie)}
+                   />
               ))}
           </div>
         </div>
