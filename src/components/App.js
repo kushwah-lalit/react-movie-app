@@ -2,7 +2,7 @@ import React from 'react';
 import {data} from '../data';
 import Navbar from './Navbar';
 import MovieCard from './MovieCard';
-import {addmovies} from '../actions';
+import {addmovies,setShowFavourites} from '../actions';
 
 class App extends React.Component {
   componentDidMount (){
@@ -31,10 +31,14 @@ class App extends React.Component {
     }
     return false;
   }
+  onChangeTab = (val) => {
+    this.props.store.dispatch(setShowFavourites(val));
+  }
   render(){
     // const movies = this.props.store.getState();//this was case when state was array of movies but now object
-    const {list} = this.props.store.getState();
+    const {list,favourites,showFavourites} = this.props.store.getState();
     console.log(this.props.store.getState());
+    const displayMovies = showFavourites ? favourites:list;
 
     console.log('RENDER');
     return (
@@ -42,11 +46,11 @@ class App extends React.Component {
         <Navbar />
         <div className="main">
           <div className="tabs">
-            <div className="tab">Movies</div>
-            <div className="tab">Favourites</div>
+            <div className={`tab ${showFavourites ? '': 'active-tabs'}`} onClick={() => this.onChangeTab(false)}>Movies</div>
+            <div className={`tab ${showFavourites ? 'active-tabs': ''}`} onClick={() => this.onChangeTab(true)}>Favourites</div>
           </div>
           <div className="list">
-              {list.map((movie,index) => (
+              {displayMovies.map((movie,index) => (
                 // as we got store in props so need to send the store dispatch via props
                   <MovieCard 
                   movie={movie} 
@@ -56,6 +60,7 @@ class App extends React.Component {
                    />
               ))}
           </div>
+          {displayMovies.length === 0 ? <div className="no-movies">No Movies to Display!</div>:null}
         </div>
       </div>
     );
