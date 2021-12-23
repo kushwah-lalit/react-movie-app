@@ -24,8 +24,18 @@ class App extends React.Component {
     console.log('STATE',store.getState());
   }
   isMovieFavourite = (movie) => {
-    const {favourites} = this.props.store.getState();
-    const index = favourites.indexOf(movie);
+    // this is for the previous state structure 
+    // const {favourites} = this.props.store.getState();
+    // const index = favourites.indexOf(movie);
+
+    // As per new structure
+    // {
+    //   movies:{},
+    //   search:{}
+    // }
+    const {movies} = this.props.store.getState();
+    const index = movies.favourites.indexOf(movie);
+
     if(index !== -1){
       return true;
     }
@@ -36,7 +46,12 @@ class App extends React.Component {
   }
   render(){
     // const movies = this.props.store.getState();//this was case when state was array of movies but now object
-    const {list,favourites,showFavourites} = this.props.store.getState();
+    // const {list,favourites,showFavourites} = this.props.store.getState();//here we have now list favourittes showfavourites keys in objects
+    
+    // Here as we changed the state structure so getState will be giving the latest pattern of state....so modify it
+    const {movies} = this.props.store.getState();
+    const {list,favourites,showFavourites} = movies;
+
     console.log(this.props.store.getState());
     const displayMovies = showFavourites ? favourites:list;
 

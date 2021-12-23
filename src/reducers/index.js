@@ -13,7 +13,8 @@ const initialMoviesState = {
     favourites:[],
     showFavourites:false
 }
-export default function movies(state = initialMoviesState, action){
+// since we will be having root reducer there we will using default
+export function movies(state = initialMoviesState, action){
     // if(action.type === ADD_MOVIES){
     //     return {
     //         ...state,
@@ -23,7 +24,7 @@ export default function movies(state = initialMoviesState, action){
     // return state;
     //
     // we can use if else but better use switch case
-
+    console.log('Movies Reducer');
     switch (action.type){
         case ADD_MOVIES:
             return {
@@ -54,4 +55,24 @@ export default function movies(state = initialMoviesState, action){
     }
     
      
+}
+// Creating the different reducer to handel secific part of the state
+const initialSeacrhState = {
+    // as we will be having only single object in search that why object and not array
+    result:{
+    }
+}
+export function search(state = initialSeacrhState, action){
+    console.log('Search Reducer');
+    return state;
+}
+const initialRootState = {
+    movies:initialMoviesState,
+    search:initialSeacrhState
+}
+export default function rootReducer(state = initialRootState, action){
+    return {
+        movies:movies(state.movies,action),
+        search:search(state.search,action)
+    }
 }
