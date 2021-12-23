@@ -49,7 +49,7 @@ class App extends React.Component {
     // const {list,favourites,showFavourites} = this.props.store.getState();//here we have now list favourittes showfavourites keys in objects
     
     // Here as we changed the state structure so getState will be giving the latest pattern of state....so modify it
-    const {movies} = this.props.store.getState();
+    const {movies,search} = this.props.store.getState();
     const {list,favourites,showFavourites} = movies;
 
     console.log(this.props.store.getState());
@@ -58,7 +58,7 @@ class App extends React.Component {
     console.log('RENDER');
     return (
       <div className="App">
-        <Navbar />
+        <Navbar search={search} dispatch={this.props.store.dispatch}/>
         <div className="main">
           <div className="tabs">
             <div className={`tab ${showFavourites ? '': 'active-tabs'}`} onClick={() => this.onChangeTab(false)}>Movies</div>

@@ -9,7 +9,7 @@
 // for using rootReducers
 import { combineReducers } from "redux";
 
-import { ADD_MOVIES, ADD_TO_FAVOURITES,REMOVE_FROM_FAVOURITES,SET_SHOW_FAVOURITES} from "../actions";
+import { ADD_MOVIES, ADD_TO_FAVOURITES,REMOVE_FROM_FAVOURITES,SET_SHOW_FAVOURITES,ADD_MOVIE_TO_LIST,ADD_SEARCH_RESULT} from "../actions";
 const initialMoviesState = {
     list:[],
     favourites:[],
@@ -52,6 +52,12 @@ export function movies(state = initialMoviesState, action){
             ...state,
             showFavourites:action.val
         }
+        // since to add to list
+        case ADD_MOVIE_TO_LIST:
+        return {
+            ...state,
+            list: [action.movie, ...state.list],
+        };
         default:
             return state;
     }
@@ -59,14 +65,27 @@ export function movies(state = initialMoviesState, action){
      
 }
 // Creating the different reducer to handel secific part of the state
-const initialSeacrhState = {
-    // as we will be having only single object in search that why object and not array
-    result:{
+const initialSearchState = {
+    results: {},
+    showSearchResults: false,
+  };
+  
+export function search(state = initialSearchState, action) {
+    switch (action.type) {
+        case ADD_SEARCH_RESULT:
+            return {
+                ...state,
+                results: action.movie,
+                showSearchResults: true,
+            };
+        case ADD_MOVIE_TO_LIST:
+            return {
+                ...state,
+                showSearchResults: false,
+            };
+        default:
+            return state;
     }
-}
-export function search(state = initialSeacrhState, action){
-    console.log('Search Reducer');
-    return state;
 }
 // const initialRootState = {
 //     movies:initialMoviesState,
