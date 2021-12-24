@@ -1,4 +1,5 @@
 import React from "react";
+import {StoreContext} from '../index';
 import { addMovieToList, handleMovieSearch } from '../actions';
 
 class Navbar extends React.Component {
@@ -51,4 +52,23 @@ class Navbar extends React.Component {
     );
   }
 }
-export default Navbar;
+// Since here Also in Navbar we can see method out of render that uses the store......
+// So again meed to make wrapper and send the store from the context as props.....
+// Also the now the props sent from the App will be getting to this wrapper class hence we need to forward them to navbar component.
+
+// export default Navbar;
+
+class NavbarWrapper extends React.Component {
+  render() {
+    return (
+      <StoreContext.Consumer>
+        {(store) => (
+          // sending the store from the context as props also forwarding the props received from the app
+          <Navbar dispatch={store.dispatch} search={this.props.search} />
+        )}
+      </StoreContext.Consumer>
+    );
+  }
+}
+
+export default NavbarWrapper;

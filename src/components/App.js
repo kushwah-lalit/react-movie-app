@@ -57,62 +57,73 @@ class App extends React.Component {
     const displayMovies = showFavourites ? favourites:list;
 
     console.log('RENDER');
+    // ************* This commented type to access the context in render is allowed when we dont have methods beyond our render part that uses the consumer data
+    // ****here above there are amny that use the store so we need to wrap it within another class and get data of context via props
+    // return (
+    //   <StoreContext.Consumer>
+    //     {(store) => {
+    //       return (
+    //         <div className="App">
+    //           <Navbar search={search} dispatch={store.dispatch}/>
+    //           <div className="main">
+    //             <div className="tabs">
+    //               <div className={`tab ${showFavourites ? '': 'active-tabs'}`} onClick={() => this.onChangeTab(false)}>Movies</div>
+    //               <div className={`tab ${showFavourites ? 'active-tabs': ''}`} onClick={() => this.onChangeTab(true)}>Favourites</div>
+    //             </div>
+    //             <div className="list">
+    //                 {displayMovies.map((movie,index) => (
+    //                   // as we got store in props so need to send the store dispatch via props
+    //                     <MovieCard 
+    //                     movie={movie} 
+    //                     key={ `movie-${index}`} 
+    //                     dispatch={store.dispatch}
+    //                     isFavourite={this.isMovieFavourite(movie)}
+    //                       />
+    //                 ))}
+    //             </div>
+    //             {displayMovies.length === 0 ? <div className="no-movies">No Movies to Display!</div>:null}
+    //           </div>
+    //         </div>
+    //       );
+    //     }}
+    //   </StoreContext.Consumer>
+    // );
+    return (
+      <div className="App">
+        {/* <Navbar search={search} dispatch={this.props.store.dispatch}/> */}
+        <Navbar search={search}/>
+        {/* No Need to send dispatch via props as we can acces it from the context */}
+        <div className="main">
+          <div className="tabs">
+            <div className={`tab ${showFavourites ? '': 'active-tabs'}`} onClick={() => this.onChangeTab(false)}>Movies</div>
+            <div className={`tab ${showFavourites ? 'active-tabs': ''}`} onClick={() => this.onChangeTab(true)}>Favourites</div>
+          </div>
+          <div className="list">
+              {displayMovies.map((movie,index) => (
+                // as we got store in props so need to send the store dispatch via props
+                  <MovieCard 
+                  movie={movie} 
+                  key={ `movie-${index}`} 
+                  dispatch={this.props.store.dispatch}
+                  isFavourite={this.isMovieFavourite(movie)}
+                   />
+              ))}
+          </div>
+          {displayMovies.length === 0 ? <div className="no-movies">No Movies to Display!</div>:null}
+        </div>
+      </div>
+    );
+  }
+}
+class AppWrapper extends React.Component {
+  render() {
     return (
       <StoreContext.Consumer>
-        {(store) => {
-          return (
-            <div className="App">
-              <Navbar search={search} dispatch={store.dispatch}/>
-              <div className="main">
-                <div className="tabs">
-                  <div className={`tab ${showFavourites ? '': 'active-tabs'}`} onClick={() => this.onChangeTab(false)}>Movies</div>
-                  <div className={`tab ${showFavourites ? 'active-tabs': ''}`} onClick={() => this.onChangeTab(true)}>Favourites</div>
-                </div>
-                <div className="list">
-                    {displayMovies.map((movie,index) => (
-                      // as we got store in props so need to send the store dispatch via props
-                        <MovieCard 
-                        movie={movie} 
-                        key={ `movie-${index}`} 
-                        dispatch={store.dispatch}
-                        isFavourite={this.isMovieFavourite(movie)}
-                          />
-                    ))}
-                </div>
-                {displayMovies.length === 0 ? <div className="no-movies">No Movies to Display!</div>:null}
-              </div>
-            </div>
-          );
-        }}
+        {/* sending the store from context via props */}
+        {(store) => <App store={store} />}
       </StoreContext.Consumer>
     );
-  
   }
-  //   return (
-  //     <div className="App">
-  //       <Navbar search={search} dispatch={this.props.store.dispatch}/>
-  //       <div className="main">
-  //         <div className="tabs">
-  //           <div className={`tab ${showFavourites ? '': 'active-tabs'}`} onClick={() => this.onChangeTab(false)}>Movies</div>
-  //           <div className={`tab ${showFavourites ? 'active-tabs': ''}`} onClick={() => this.onChangeTab(true)}>Favourites</div>
-  //         </div>
-  //         <div className="list">
-  //             {displayMovies.map((movie,index) => (
-  //               // as we got store in props so need to send the store dispatch via props
-  //                 <MovieCard 
-  //                 movie={movie} 
-  //                 key={ `movie-${index}`} 
-  //                 dispatch={this.props.store.dispatch}
-  //                 isFavourite={this.isMovieFavourite(movie)}
-  //                  />
-  //             ))}
-  //         </div>
-  //         {displayMovies.length === 0 ? <div className="no-movies">No Movies to Display!</div>:null}
-  //       </div>
-  //     </div>
-  //   );
-  // }
-  
 }
 
-export default App;
+export default AppWrapper;
