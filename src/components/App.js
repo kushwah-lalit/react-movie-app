@@ -4,7 +4,10 @@ import Navbar from './Navbar';
 import MovieCard from './MovieCard';
 import {addmovies,setShowFavourites} from '../actions';
 // import {StoreContext} from '../index';
-import {connect} from '../index';
+      // import {connect} from '../index';
+      // ****instead import the pre coded from the package
+import { connect } from 'react-redux';
+
 // now importing connect as we will be connecting component to store instaead of access from consumer at each level..
 
 class App extends React.Component {
