@@ -65,6 +65,53 @@ class Provider extends React.Component {
 //   document.getElementById('root')
 // );
 
+
+// ***** Writing the connect function here
+
+// const connectedComponent = connect(callback)(App);
+export function connect(callback) {
+  // curring as coonect returns functions
+  return function (Component) {
+    // need to wrap this clas in another as store from context is used outside the render
+    class ConnectedComponent extends React.Component {
+      constructor(props) {
+        // subscribing each component to the store to re render on update...so whole thing doesnt
+        super(props);
+        this.unsubscribe = this.props.store.subscribe(() => {
+          this.forceUpdate();
+        });
+      }
+
+      componentWillUnmount() {
+        this.unsubscribe();
+      }
+      render() {
+        // taking store from props
+        const { store } = this.props;
+        const state = store.getState();
+        const dataToBeSentAsProps = callback(state);
+        // getting required state from the callback
+        // send the state data in props also dispatch by deafcult
+        return <Component dispatch={store.dispatch} {...dataToBeSentAsProps} />;
+      }
+    }
+// wrapper
+    class ConnectedComponentWrapper extends React.Component {
+      render() {
+        return (
+          <StoreContext.Consumer>
+            {/* function to access the store from consumer */}
+            {(store) => {
+              return <ConnectedComponent store={store} />;
+            }}
+          </StoreContext.Consumer>
+        );
+      }
+    }
+    return ConnectedComponentWrapper;
+  };
+}
+
 ReactDOM.render(
   <Provider store={store}>
     <App/>

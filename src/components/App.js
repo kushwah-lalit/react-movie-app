@@ -3,26 +3,32 @@ import {data} from '../data';
 import Navbar from './Navbar';
 import MovieCard from './MovieCard';
 import {addmovies,setShowFavourites} from '../actions';
-import {StoreContext} from '../index';
+// import {StoreContext} from '../index';
+import {connect} from '../index';
+// now importing connect as we will be connecting component to store instaead of access from consumer at each level..
 
 class App extends React.Component {
   componentDidMount (){
     // api call
     // dispatch action
-    const {store} = this.props;
-    store.subscribe(() =>{
-      console.log('Updated');
-      this.forceUpdate();
-    });
+    // ************ Here we no need to subscribe as will be done by the connect and also no store access in props
+              // const {store} = this.props;
+              // store.subscribe(() =>{
+              //   console.log('Updated');
+              //   this.forceUpdate();
+              // });
+      // *************
 
     // store.dispatch({
     //   type:'ADD_MOVIES',
     //   movies: data
     // });
     // ideal way to do
-    store.dispatch(addmovies(data));
 
-    console.log('STATE',store.getState());
+    // store.dispatch(addmovies(data));
+    this.props.dispatch(addmovies(data));//via connect props
+
+    // console.log('STATE',store.getState());
   }
   isMovieFavourite = (movie) => {
     // this is for the previous state structure 
@@ -34,7 +40,11 @@ class App extends React.Component {
     //   movies:{},
     //   search:{}
     // }
-    const {movies} = this.props.store.getState();
+
+
+    // no store in connect via props
+    // const {movies} = this.props.store.getState();
+    const {movies} = this.props;
     const index = movies.favourites.indexOf(movie);
 
     if(index !== -1){
@@ -43,17 +53,24 @@ class App extends React.Component {
     return false;
   }
   onChangeTab = (val) => {
-    this.props.store.dispatch(setShowFavourites(val));
+    // this.props.store.dispatch(setShowFavourites(val));
+    // now store via connect
+    this.props.dispatch(setShowFavourites(val));
   }
   render(){
     // const movies = this.props.store.getState();//this was case when state was array of movies but now object
     // const {list,favourites,showFavourites} = this.props.store.getState();//here we have now list favourittes showfavourites keys in objects
     
     // Here as we changed the state structure so getState will be giving the latest pattern of state....so modify it
-    const {movies,search} = this.props.store.getState();
+
+
+    // const {movies,search} = this.props.store.getState();
+
+     ////*****************Now we are accessing the data from teh props via connect so no access to store so modify the destructuring */
+     const {movies,search} = this.props;
     const {list,favourites,showFavourites} = movies;
 
-    console.log(this.props.store.getState());
+    console.log(this.props);
     const displayMovies = showFavourites ? favourites:list;
 
     console.log('RENDER');
@@ -104,7 +121,9 @@ class App extends React.Component {
                   <MovieCard 
                   movie={movie} 
                   key={ `movie-${index}`} 
-                  dispatch={this.props.store.dispatch}
+                  // dispatch={this.props.store.dispatch}
+                  // as now only props no store we receive
+                  dispatch={this.props.dispatch}
                   isFavourite={this.isMovieFavourite(movie)}
                    />
               ))}
@@ -115,16 +134,23 @@ class App extends React.Component {
     );
   }
 }
-class AppWrapper extends React.Component {
-  render() {
-    return (
-      <StoreContext.Consumer>
-        {/* sending the store from context via props */}
-        {(store) => <App store={store} />}
-      </StoreContext.Consumer>
-    );
-  }
-}
+// ******** access store from the context
+// class AppWrapper extends React.Component {
+//   render() {
+//     return (
+//       <StoreContext.Consumer>
+//         {/* sending the store from context via props */}
+//         {(store) => <App store={store} />}
+//       </StoreContext.Consumer>
+//     );
+//   }
+// }
+// export default AppWrapper;
+
+// **************NO NEED OF ABOVE WRAPPER as we will be connect the component ot store
+
+
+
 // ******** learning how to use the HOC inorder to avoid wrapper....And how to connect components to redux
 // function callback(state) {
 //   return {
@@ -135,4 +161,17 @@ class AppWrapper extends React.Component {
 // const connectedComponent = connect(callback)(App);
 // export default connectedComponent;
 
-export default AppWrapper;
+
+// ****** CODE to use connect to connect component to store
+
+function mapStateToProps(state) {
+  return {
+    movies: state.movies,
+    search: state.movies,
+  };
+}
+const connectedComponent = connect(mapStateToProps)(App);
+export default connectedComponent;
+
+
+
