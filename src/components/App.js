@@ -125,5 +125,14 @@ class AppWrapper extends React.Component {
     );
   }
 }
+// ******** learning how to use the HOC inorder to avoid wrapper....And how to connect components to redux
+// function callback(state) {
+//   return {
+//     movies: state.movies,
+//     search: state.movies,
+//   };
+// }
+// const connectedComponent = connect(callback)(App);
+// export default connectedComponent;
 
 export default AppWrapper;
