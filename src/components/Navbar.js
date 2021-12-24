@@ -1,6 +1,7 @@
 import React from "react";
-import {StoreContext} from '../index';
+// import {StoreContext} from '../index';
 import { addMovieToList, handleMovieSearch } from '../actions';
+import {connect} from '../index';
 
 class Navbar extends React.Component {
   constructor(props) {
@@ -58,17 +59,27 @@ class Navbar extends React.Component {
 
 // export default Navbar;
 
-class NavbarWrapper extends React.Component {
-  render() {
-    return (
-      <StoreContext.Consumer>
-        {(store) => (
-          // sending the store from the context as props also forwarding the props received from the app
-          <Navbar dispatch={store.dispatch} search={this.props.search} />
-        )}
-      </StoreContext.Consumer>
-    );
-  }
+// ***** NOT using the context we will use the connect to connect to store
+
+// class NavbarWrapper extends React.Component {
+//   render() {
+//     return (
+//       <StoreContext.Consumer>
+//         {(store) => (
+//           // sending the store from the context as props also forwarding the props received from the app
+//           <Navbar dispatch={store.dispatch} search={this.props.search} />
+//         )}
+//       </StoreContext.Consumer>
+//     );
+//   }
+// }
+
+// export default NavbarWrapper;
+
+function mapStateToProps({ search }) {
+  return {
+    search,
+  };
 }
 
-export default NavbarWrapper;
+export default connect(mapStateToProps)(Navbar);

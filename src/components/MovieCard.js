@@ -36,3 +36,4 @@ class MovieCard extends React.Component{
     }
 }
 export default MovieCard;
+// we can connect this movie card even....Just for the dispatch function else same so Do similar like others
